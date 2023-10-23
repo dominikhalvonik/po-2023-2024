@@ -11,8 +11,11 @@
 </head>
 <body>
 <?php
-include_once "lib/functions.php";
 include_once "parts/header.php";
+
+if(!isset($common)) {
+    $common = new stdClass();
+}
 ?>
   <main>
     <section class="banner">
@@ -29,7 +32,7 @@ include_once "parts/header.php";
     </section>
       <section class="container">
         <?php
-        getQnA(3);
+        $common->getQnA();
         ?>
     </section>
     </section>

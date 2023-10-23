@@ -12,8 +12,11 @@
 <body>
 
   <?php
-  include_once "lib/functions.php";
   include_once "parts/header.php";
+
+  if(!isset($common)) {
+      $common = new stdClass();
+  }
   ?>
   <main>
     <section class="banner">
@@ -30,7 +33,7 @@
     </section>
     <section class="container">
         <?php
-        $content = printRow(
+        $content = $common->printRow(
             1,
             "Mollit cupidatat velit quis irure non eiusmod culpa cillum velit magna est aliquip.",
         "<p>Nulla dolore sit esse pariatur culpa sint nulla fugiat nulla ut. Sit adipisicing fugiat id consequat qui est. Nulla ea aliquip culpa nulla mollit do excepteur ex ullamco consequat tempor consectetur. Tempor et ea voluptate irure est magna magna reprehenderit qui non dolore. Consequat id ad cillum do qui. Proident ipsum enim eiusmod fugiat quis anim consequat ullamco mollit excepteur. Eiusmod eu ad irure anim velit laborum commodo nostrud pariatur id ea ad.</p>
