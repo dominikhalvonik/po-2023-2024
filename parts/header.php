@@ -15,11 +15,9 @@ $db = new DB("localhost", 3306, "root", "", "po-2023-2024");
     <nav class="main-nav">
         <ul class="main-menu" id="main-menu container">
             <?php
-            try {
-                $common->getMenu(1);
-            } catch (Exception $exception) {
-                file_put_contents("error.log", "Menu error", FILE_APPEND);
-                echo '<li><a href="index.php">Home</a></li>';
+            $menu = $db->getMenuItems();
+            foreach ($menu as $menuName => $menuUrl) {
+                echo '<li><a href="'.$menuUrl.'">'.$menuName.'</a></li>';
             }
             ?>
         </ul>

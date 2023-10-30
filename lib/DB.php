@@ -10,6 +10,8 @@ class DB
     private $password = "";
     private $dbName = "po-2023-2024";
 
+    private \PDO $connection;
+
     public function __construct(
         string $host = "",
         int $port = 3306,
@@ -39,15 +41,61 @@ class DB
         }
 
         try {
-            $conn = new \PDO(
-                "mysql:host=$this->host;dbname=$this->dbName",
+            $this->connection = new \PDO(
+                "mysql:host=$this->host;dbname=$this->dbName;charset=utf8mb4",
                 $this->username,
                 $this->password
             );
             // set the PDO error mode to exception
-            $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch(\PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
         }
+    }
+
+    public function insertMenuRecord(string $pageName, string $url): bool
+    {
+        $sql = "INSERT INTO menu(page_name, url) VALUE ('" . $pageName . "', '" . $url . "')";
+        $stmt = $this->connection->prepare($sql);
+        return $stmt->execute();
+    }
+
+    public function getMenuItems(): array
+    {
+        $sql = "SELECT page_name, url FROM menu";
+        $query = $this->connection->query($sql);
+        $data = $query->fetchAll(\PDO::FETCH_ASSOC);
+        $finalMenu = [];
+
+        foreach ($data as $menuItem) {
+            $finalMenu[$menuItem['page_name']] = $menuItem['url'];
+        }
+
+        return $finalMenu;
+    }
+
+    public function deleteMenuItems(): bool
+    {
+        $sql = "DELETE FROM menu WHERE id > 4";
+        $stmt = $this->connection->prepare($sql);
+        return $stmt->execute();
+    }
+
+    public function updateMenuItem(int $id, string $pageName = "", string $url = ""): bool
+    {
+        $sql = "UPDATE menu SET ";
+
+        if(!empty($pageName)) {
+            $sql .= " page_name = '" . $pageName . "'";
+        }
+
+        if(!empty($url)) {
+            $sql .= ", url = '" . $url . "'";
+        }
+
+        $sql .= " WHERE id = ". $id;
+
+        $stmt = $this->connection->prepare($sql);
+        return $stmt->execute();
     }
 }
