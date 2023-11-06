@@ -74,9 +74,27 @@ class DB
         return $finalMenu;
     }
 
-    public function deleteMenuItems(): bool
+    public function getMenu(): array
     {
-        $sql = "DELETE FROM menu WHERE id > 4";
+        $sql = "SELECT * FROM menu";
+        $query = $this->connection->query($sql);
+        $data = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $data;
+    }
+
+    public function getMenuItem(int $id): array
+    {
+        $sql = "SELECT * FROM menu WHERE id = ".$id;
+        $query = $this->connection->query($sql);
+        $data = $query->fetch(\PDO::FETCH_ASSOC);
+
+        return $data;
+    }
+
+    public function deleteMenuItem(int $id): bool
+    {
+        $sql = "DELETE FROM menu WHERE id = ".$id;
         $stmt = $this->connection->prepare($sql);
         return $stmt->execute();
     }
